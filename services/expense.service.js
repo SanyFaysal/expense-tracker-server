@@ -1,7 +1,9 @@
 const Expense = require("../models/Expense");
 
 exports.getExpenseService = async () => {
+  const today = new Date();
   const lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const lastTwoDay = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
 
   const result = await Expense.find({});
 
@@ -19,7 +21,19 @@ exports.getExpenseService = async () => {
     }
   }
 
-  return { result, totalExpense, weeklyExpense };
+  // last two days activity
+  const latestActivity = await Expense.aggregate([
+    {
+      $match: {
+        date: {
+          $gte: lastTwoDay,
+          $lte: today,
+        },
+      },
+    },
+  ]);
+
+  return { result, totalExpense, weeklyExpense, latestActivity };
 };
 exports.createExpenseService = async (data) => {
   const result = await Expense.create(data);

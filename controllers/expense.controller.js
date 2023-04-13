@@ -5,13 +5,15 @@ const {
 
 exports.getExpenses = async (req, res) => {
   try {
-    const { result, totalExpense, weeklyExpense } = await getExpenseService();
+    const { result, totalExpense, weeklyExpense, latestActivity } =
+      await getExpenseService();
 
     res.status(200).json({
       status: "Success",
       message: "Successfully get all of your expenses",
       totalExpense,
       weeklyExpense,
+      latestActivity,
       data: result,
     });
   } catch (error) {
