@@ -3,7 +3,7 @@ const { default: mongoose } = require("mongoose");
 const expenseSchema = mongoose.Schema(
   {
     amount: {
-      type: String,
+      type: Number,
       required: true,
     },
     category: {
