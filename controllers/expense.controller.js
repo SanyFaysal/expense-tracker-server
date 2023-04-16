@@ -5,8 +5,14 @@ const {
 
 exports.getExpenses = async (req, res) => {
   try {
-    const { result, totalExpense, weeklyExpense, latestActivity } =
-      await getExpenseService();
+    const {
+      result,
+      totalExpense,
+      weeklyExpense,
+      latestActivity,
+      weeklyActivities,
+      monthlyActivities,
+    } = await getExpenseService();
 
     res.status(200).json({
       status: "Success",
@@ -14,6 +20,8 @@ exports.getExpenses = async (req, res) => {
       totalExpense,
       weeklyExpense,
       latestActivity,
+      weeklyActivities,
+      monthlyActivities,
       data: result,
     });
   } catch (error) {

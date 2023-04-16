@@ -3,7 +3,8 @@ const Expense = require("../models/Expense");
 exports.getExpenseService = async () => {
   const today = new Date();
   const lastWeek = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-  const lastTwoDay = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000);
+  const lastMonth = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const lastTwoDay = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
 
   const result = await Expense.find({});
 
@@ -32,8 +33,36 @@ exports.getExpenseService = async () => {
       },
     },
   ]);
+  // last one days activity
+  const monthlyActivities = await Expense.aggregate([
+    {
+      $match: {
+        date: {
+          $gte: lastMonth,
+          $lte: today,
+        },
+      },
+    },
+  ]);
+  const weeklyActivities = await Expense.aggregate([
+    {
+      $match: {
+        date: {
+          $gte: lastWeek,
+          $lte: today,
+        },
+      },
+    },
+  ]);
 
-  return { result, totalExpense, weeklyExpense, latestActivity };
+  return {
+    result,
+    totalExpense,
+    weeklyExpense,
+    latestActivity,
+    weeklyActivities,
+    monthlyActivities,
+  };
 };
 exports.createExpenseService = async (data) => {
   const result = await Expense.create(data);
