@@ -6,7 +6,7 @@ exports.getExpenseService = async () => {
   const lastMonth = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
   const lastTwoDay = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
 
-  const result = await Expense.find({});
+  const result = await Expense.find({}).sort({ date: 1 });
 
   //calculate total expense
   let totalExpense = 0;
